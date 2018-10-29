@@ -1,0 +1,49 @@
+version: "3.1"
+services:
+    memcached:
+      image: memcached:alpine
+      container_name: drupal-memcached
+    mysql:
+      image: mysql:8.0
+      container_name: drupal-mysql
+      working_dir: /var/www
+      volumes:
+        - .:/var/www
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=tdrupal
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=root
+      ports:
+        - "3306:3306"
+      expose:
+        - "3306"
+    webserver:
+      build: phpdocker/web
+      container_name: drupal-web
+      working_dir: /var/www
+      volumes:
+          - ./www:/var/www
+          - ./logs:/var/log/nginx
+      environment:
+        - docker=1
+      ports:
+        - "80:80"
+        - "443:443"
+      depends_on:
+        - php-fpm
+        - mysql
+      links:
+        - php-fpm
+        - mysql
+    php-fpm:
+      build: phpdocker/php-fpm
+      container_name: drupal-php-fpm
+      expose:
+        - 9000
+      volumes:
+        - ./www:/var/www
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+      environment:
+        - docker=1
+
