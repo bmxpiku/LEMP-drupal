@@ -11,7 +11,7 @@ services:
         - .:/var/www
       environment:
         - MYSQL_ROOT_PASSWORD=root
-        - MYSQL_DATABASE=tdrupal
+        - MYSQL_DATABASE=tkundeunivers
         - MYSQL_USER=root
         - MYSQL_PASSWORD=root
       ports:
@@ -44,6 +44,7 @@ services:
       volumes:
         - ./www:/var/www
         - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+        - ./phpdocker/php-fpm/20-xdebug.ini:/etc/php/7.2/fpm/conf.d/20-xdebug.ini
       environment:
         - docker=1
 
