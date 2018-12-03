@@ -19,4 +19,6 @@ RUN apt-get -y install git \
 
 ADD .bash_profile /root/
 ADD drupal7.conf /etc/nginx/
-ADD conf.d/* /etc/nginx/
+ADD drupal8.conf /etc/nginx/
+
+COPY conf.d/ /etc/nginx/conf.d/
